@@ -1,9 +1,8 @@
-from reservados import termosReservados, operadores
+from reservados import termosReservados
 from tokens import Token, Num, Id
 from lerArquivo import LerArquivo
 
 
-# Realiza a análise léxica do código
 class Lexico:
     def __init__(self):
         self.expr = LerArquivo().ler_arquivo()
@@ -26,7 +25,7 @@ class Lexico:
                 while self.peek() != "\n":
                     token = self.peek()
                     if token == "(":
-                        if self.peek(1) in termosReservados:
+                        if self.peek(1) in termosReservados["todos_operadores"]:
                             raise Exception("Expressão invalida para este programa")
                         self.stack.append(token)
                     elif token == ')':
@@ -34,12 +33,12 @@ class Lexico:
                             self.stack.pop() 
                         else:
                             self.stack.append(token)
-                    elif token in operadores and (self.peek(1) in operadores):
-                            raise Exception("Tem um operador logo em seguida do operador: {0}".format(token))
+                    elif token in termosReservados["operadores_aritmeticos"] and self.peek(1) in termosReservados["operadores_aritmeticos"]:
+                            raise Exception(f"Tem um operador logo em seguida do operador: {token}")
 
-                    elif token not in termosReservados and not token.isalpha() and not token.isdigit():
-                        raise Exception("Termo no codigo não identificado: {0}".format(token))
-                    elif token in termosReservados and self.peek(1) == "\n":
+                    elif token not in termosReservados['todos_operadores'] and not token.isalpha() and not token.isdigit():
+                        raise Exception(f"Termo no codigo não identificado: {token}")
+                    elif token in termosReservados['operadores_matematicos'] and self.peek(1) == "\n":
                         raise Exception("Expressão invalida para este programa")
                     self.advance()
                 if len(self.stack) > 0:
@@ -56,7 +55,7 @@ class Lexico:
                 self.token_list.append(self.token_id())
             elif peek.isdigit():
                 self.token_list.append(self.token_number())
-            elif peek in termosReservados:
+            elif peek in termosReservados["todos_operadores"]:
                 self.token_list.append(self.token())
 
         return self.token_list

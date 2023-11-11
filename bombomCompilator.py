@@ -1,12 +1,6 @@
-from analisadorLexico import Lexico
+from analisadorSintatico import Sintatico
 from tokens import Token, Id, Num
 
-dummy = Lexico()
+dummy = Sintatico()
 
-listinha = dummy.tokenization()
-
-for elementinho in listinha:
-    if hasattr(elementinho, 'value'):
-        print(f'<{elementinho.tag},{elementinho.value}>', end=" ")
-    else:
-        print(f'<{elementinho.tag}>', end=" ")
+dummy()
