@@ -34,13 +34,22 @@ class Lexico:
                         else:
                             self.stack.append(token)
                     elif token in termosReservados["operadores_aritmeticos"] and self.peek(1) in termosReservados["operadores_aritmeticos"]:
-                            raise Exception(f"Tem um operador logo em seguida do operador: {token}")
-
+                        print("Coe4")
+                        raise Exception(f"Tem um operador logo em seguida do operador: {token}")
+                    elif token in termosReservados["operadores_comparacao"] and self.peek(-1)in termosReservados["operadores_comparacao"]:
+                        posicao_atual = self.expr.find(token)
+                        self.expr = self.expr[:posicao_atual]+self.expr[self.peek(1):]
+                        pass
+                    elif token in termosReservados["operadores_comparacao"] and self.peek(1) in termosReservados["operadores_comparacao"]:
+                        token=f"{token+self.peek(1)}"
                     elif token not in termosReservados['todos_operadores'] and not token.isalpha() and not token.isdigit():
+                        print("Coe2")
                         raise Exception(f"Termo no codigo não identificado: {token}")
                     elif token in termosReservados['operadores_matematicos'] and self.peek(1) == "\n":
+                        print("Coe1")
                         raise Exception("Expressão invalida para este programa")
                     self.advance()
+                    print(token)
                 if len(self.stack) > 0:
                     raise Exception("Expressão fora de balanço")
             except Exception as e:
@@ -76,6 +85,7 @@ class Lexico:
 
     def token(self):
         token = ""
+    
         token = self.peek()
         self.advance()
         return Token(token)
