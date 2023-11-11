@@ -3,6 +3,7 @@ from tokens import Token, Num, Id
 from lerArquivo import LerArquivo
 
 
+# Realiza a análise léxica do código
 class Lexico:
     def __init__(self):
         self.expr = LerArquivo().ler_arquivo()
